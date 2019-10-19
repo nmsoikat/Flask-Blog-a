@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+
+{% block main_content %}
+    <article class="media content-section">
+        <div class="media-body">
+            <img alt="" class="rounded-circle article-img" src=" {{ url_for('static', filename='images/'+post.author.img_file) }} ">
+                <div class="article-metadata">
+                    <a class="mr-2" href=" {{ url_for('users.user_posts', username=post.author.username) }} ">{{ post.author.username }}</a>
+                    <small class="text-muted">{{ post.post_date.strftime('%d-%m-%Y') }}</small>
+                    {% if post.author == current_user %}
+                        <a class="btn btn-info mb-1 mt-1 btn-sm" href=" {{ url_for('posts.update_post', post_id=post.id) }} ">
+                            Update
+                        </a>
+                        <button class="btn btn-danger m-1 btn-sm" data-target="#deleteModal" data-toggle="modal">Delete</button>
+                    {% endif %}
+                </div>
+                <h2>{{ post.title }}</h2>
+                <p class="article-content">{{ post.content }}</p>
+            </div>
+        </article>
+
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade" id="deleteModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                        <form action=" {{ url_for('posts.delete_post', post_id=post.id, from_u_p_page=from_u_p_page) }} " method="POST">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock main_content %}
